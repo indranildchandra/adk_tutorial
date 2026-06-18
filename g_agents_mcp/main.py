@@ -1,20 +1,15 @@
-# main_trip.py
 import asyncio
-import os
-from pathlib import Path
 
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai.types import Content, Part
 
-# Import the new trip agent
 from trip_agent import root_agent
 
 async def main():
-    print("🤖 Initializing Trip Planner Agent CLI...")
+    print("Initializing Trip Planner Agent CLI...")
     print("--------------------------------------------------")
 
-    # Using a simple temporary session for this example
     session_service = InMemorySessionService()
     session = await session_service.create_session(
         app_name=root_agent.name, user_id="cli_user", session_id="trip_session"
@@ -30,7 +25,7 @@ async def main():
         try:
             query = input("You: ")
             if query.lower() in ["quit", "exit"]:
-                print("🤖 Goodbye!")
+                print("Goodbye!")
                 break
 
             print("Agent: ", end="", flush=True)
@@ -48,11 +43,11 @@ async def main():
             print("\n")
 
         except (KeyboardInterrupt, EOFError):
-            print("\n🤖 Goodbye!")
+            print("\nGoodbye!")
             break
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\n🛑 Shutting down.")
+        print("\nShutting down.")

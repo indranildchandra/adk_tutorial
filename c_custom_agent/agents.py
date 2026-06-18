@@ -149,4 +149,3 @@ class BudgetAwarePlannerAgent(BaseAgent):
 
 # --- 2. Instantiate the Agent ---
 root_agent = BudgetAwarePlannerAgent(name="BudgetAwarePlannerAgent")
-print("🤖 Budget-Aware Planner Agent is ready.")

@@ -1,7 +1,7 @@
 # Google AI Development Kit (ADK) dependencies
 # Conditional installation based on Python version
 google-adk==0.3.0; python_version<"3.9"
-google-adk==1.15.1; python_version>="3.9"
+google-adk==1.33.0; python_version>="3.9"
 
 # Additional dependencies that might be needed
 python-dotenv>=1.0.0

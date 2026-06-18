@@ -1,14 +1,8 @@
-import logging
-from typing import AsyncGenerator, Dict, Any
-import os
+from typing import Dict, Any
 
-# Import ADK components
-from google.adk.agents import LlmAgent, BaseAgent
-from google.adk.events import Event
-from google.adk.agents.invocation_context import InvocationContext
+from google.adk.agents import LlmAgent
 from google.adk.tools import ToolContext, google_search
 from google.adk.tools.agent_tool import AgentTool
-from typing_extensions import override
 from dotenv import load_dotenv
 
 # Import our new memory tools
@@ -77,4 +71,3 @@ root_agent = LlmAgent(
     ]
 )
 
-print("🤖 Memory Coordinator Agent (with ADK Session Service) is ready.")

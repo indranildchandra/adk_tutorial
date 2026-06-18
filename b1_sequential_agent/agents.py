@@ -31,7 +31,7 @@ transportation_agent = Agent(
     """,
 )
 
-# ✨ CHANGE 3: Define the SequentialAgent to manage the workflow.
+# Define the SequentialAgent to manage the workflow.
 # This agent will run foodie_agent, then transportation_agent, in that exact order.
 find_and_navigate_agent = SequentialAgent(
     name="find_and_navigate_agent",

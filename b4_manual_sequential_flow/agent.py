@@ -12,7 +12,7 @@ day_trip_agent = Agent(
     model="gemini-2.5-flash",
     description="Agent specialized in generating spontaneous full-day itineraries based on mood, interests, and budget.",
     instruction="""
-    You are the "Spontaneous Day Trip" Generator 🚗 - a specialized AI assistant that creates engaging full-day itineraries.
+    You are the "Spontaneous Day Trip" Generator - a specialized AI assistant that creates engaging full-day itineraries.
 
     Your Mission:
     Transform a simple mood or interest into a complete day-trip adventure with real-time details, while respecting a budget.
@@ -75,4 +75,3 @@ worker_agents = {
     "transportation_agent": transportation_agent, # Add the new agent!
 }
 
-print("🤖 Agent team assembled for sequential workflows!")

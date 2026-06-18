@@ -19,7 +19,7 @@ day_trip_agent = Agent(
     model="gemini-2.5-flash",
     description="Agent specialized in generating spontaneous full-day itineraries based on mood, interests, and budget.",
     instruction="""
-    You are the "Spontaneous Day Trip" Generator 🚗 - a specialized AI assistant that creates engaging full-day itineraries.
+    You are the "Spontaneous Day Trip" Generator - a specialized AI assistant that creates engaging full-day itineraries.
 
     Your Mission:
     Transform a simple mood or interest into a complete day-trip adventure with real-time details, while respecting a budget.
@@ -35,7 +35,7 @@ day_trip_agent = Agent(
     tools=[google_search]
 )
 
-# ✨ CHANGE 1: We tell foodie_agent to save its output to the shared state.
+# foodie_agent saves its output to the shared state.
 # Note the new `output_key` and the more specific instruction.
 foodie_agent = Agent(
     name="foodie_agent",
@@ -49,7 +49,7 @@ foodie_agent = Agent(
     output_key="destination"  # ADK will save the agent's final response to state['destination']
 )
 
-# ✨ CHANGE 2: We tell transportation_agent to read from the shared state.
+# transportation_agent reads the destination from shared state.
 # The `{destination}` placeholder is automatically filled by the ADK from the state.
 transportation_agent = Agent(
     name="transportation_agent",
@@ -63,8 +63,7 @@ transportation_agent = Agent(
     """,
 )
 
-# ✨ CHANGE 3: Define the SequentialAgent to manage the workflow.
-# This agent will run foodie_agent, then transportation_agent, in that exact order.
+# SequentialAgent manages the workflow: foodie_agent then transportation_agent.
 find_and_navigate_agent = SequentialAgent(
     name="find_and_navigate_agent",
     sub_agents=[foodie_agent, transportation_agent],
@@ -134,5 +133,4 @@ router_agent = Agent(
 )
 
 
-print("🤖 Agent team assembled with a SequentialAgent workflow!")
 root_agent = router_agent

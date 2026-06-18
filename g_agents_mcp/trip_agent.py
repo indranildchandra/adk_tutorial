@@ -1,15 +1,14 @@
 # agents/trip_agent.py
+import os
 from google.adk.agents import Agent
 from toolbox_core import ToolboxSyncClient
 from dotenv import load_dotenv
 
-# Import our new memory tools
-
 load_dotenv()
 
-# Connect to the MCP Toolbox server running on port 7001
-# Note the different port number from the previous lab.
-toolbox = ToolboxSyncClient("http://127.0.0.1:7001")
+# Connect to the MCP Toolbox server (configure via MCP_SERVER_URL env var)
+MCP_SERVER_URL = os.getenv("MCP_SERVER_URL", "http://127.0.0.1:7001")
+toolbox = ToolboxSyncClient(MCP_SERVER_URL)
 
 # Load the toolset we defined in trip_tools.yaml
 tools = toolbox.load_toolset('trip-planner-tools')
@@ -42,4 +41,3 @@ root_agent = Agent(
     tools=tools,
 )
 
-print("🤖 Trip Planner Agent is ready.")

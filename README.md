@@ -1,85 +1,146 @@
-# ADK Day Trip Planning Agent
+# ADK Tutorial - Day Trip Planning Agents
 
-A specialized AI agent built with Google's AI Development Kit (ADK) that generates creative and fun day trip plans based on user preferences, location, and budget constraints.
+A hands-on tutorial for Google's AI Development Kit (ADK) demonstrating progressively advanced agent patterns: single agents, sequential workflows, parallel execution, loop agents, custom agents, routing, agent-as-tool, memory, and MCP tool integration.
 
-**Please make sure to check [goo.gle/advancedadk](https://goo.gle/advancedadk) to set up this project.**
+## Modules
 
-## Features
-
-- 🎯 **Personalized Planning**: Generates trip suggestions based on user interests and preferences
-- 📍 **Location-Aware**: Works with city names, addresses, or GPS coordinates
-- 💰 **Budget-Conscious**: Targets moderate budget activities (affordable yet valuable)
-- 🔍 **Real-Time Search**: Uses Google Search to find current events and venues
-- 📅 **Date-Specific**: Plans activities for specific weekend dates
-- 🎨 **Creative Suggestions**: Maximum 3 distinct activities per plan with detailed location information
-
-## Tutorial
-
-For a guided walkthrough of how to set up this project, please refer to the [tutorial](https://goo.gle/advancedadk).
+| Module | Pattern |
+|--------|---------|
+| `a_single_agent` | Basic single agent with Google Search |
+| `b1_sequential_agent` | SequentialAgent pipeline |
+| `b2_parallel_agent` | ParallelAgent (simultaneous specialists) |
+| `b3_loop_agent` | LoopAgent with iterative refinement |
+| `b4_manual_sequential_flow` | Manual routing with multiple agents |
+| `c_custom_agent` | Custom BaseAgent with Python decision logic |
+| `d_routing_agent` | Router agent with sub-agent delegation |
+| `e_agent_as_tool` | Agents wrapped as tools (AgentTool) |
+| `f_agent_with_memory` | Session-based persistent memory |
+| `g_agents_mcp` | MCP Toolbox integration with SQLite |
 
 ## Prerequisites
 
-- Python 3.8 or higher
-- Google Cloud SDK installed and authenticated (`gcloud auth login`)
+- Python 3.9 or higher
+- One of the two authentication options below
+
+### Authentication Options
+
+| | Option 1 (Default) | Option 2 |
+|-|-------------------|----------|
+| **Method** | Vertex AI | Gemini API Key |
+| **Requires** | Google Cloud project | Nothing — just an API key |
+| **Cost** | GCP billing (free tier available) | Free tier available |
+| **Setup** | `gcloud auth application-default login` | Get key at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+
+The setup script will ask which option you want during configuration.
 
 ## Quick Setup
 
-This project uses a setup script to configure the environment automatically. Simply run the script for your operating system.
-
-### For Mac/Linux Users
+### Mac / Linux
 
 ```bash
 chmod +x setup_venv.sh
+
+# Default — Vertex AI (requires a Google Cloud project)
 ./setup_venv.sh
+
+# Alternative — Gemini API key (free, no Google Cloud needed)
+./setup_venv.sh --use-gemini-api-key
 ```
 
-### For Windows Users
+The script will:
+1. Check your Python version (3.9+ required)
+2. Create a `.adk_env` virtual environment
+3. Install all dependencies from `requirements.txt`
+4. Prompt for your credentials and create a `.env` file
+5. Set up the SQLite database for module `g_agents_mcp`
 
-```cmd
-setup_venv.bat
+### Manual Setup
+
+```bash
+python3 -m venv .adk_env
+source .adk_env/bin/activate      # Windows: .adk_env\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env — enable Option 1 (Vertex AI) or Option 2 (Gemini API key), see comments inside
+python3 setup_trip_database.py
 ```
 
-### What the Script Does
+## Running the Agents
 
-The setup script will:
+Activate the virtual environment first:
 
-1.  **Check for Python**: Ensures you have Python 3.8 or higher.
-2.  **Create a Virtual Environment**: Sets up a dedicated `.adk_env` directory.
-3.  **Install Dependencies**: Installs the required Python packages from `requirements.txt`.
-4.  **Prompt for Project ID**: Asks for your Google Cloud Project ID.
-5.  **Create `.env` File**: Generates a `.env` file in the root directory with the following configuration:
+```bash
+source .adk_env/bin/activate
+```
 
-    ```env
-    GOOGLE_GENAI_USE_VERTEXAI=TRUE
-    GOOGLE_CLOUD_PROJECT=your_project_id
-    GOOGLE_CLOUD_LOCATION=us-central1
-    ```
+### ADK Web UI (modules a through g, except g_agents_mcp)
 
-## Running the Agent
+Use `run.sh` from the repo root. It starts `adk web` with persistent session storage so sessions survive page refreshes:
 
-After the setup is complete:
+```bash
+chmod +x run.sh
+./run.sh
+```
 
-1.  **Activate the virtual environment**:
+Open [http://localhost:8080](http://localhost:8080) and select any module from the dropdown.
 
-    **Mac/Linux:**
-    ```bash
-    source .adk_env/bin/activate
-    ```
+### CLI — module f (persistent memory)
 
-    **Windows:**
-    ```cmd
-    .adk_env\Scripts\activate
-    ```
+Module `f_agent_with_memory` has a CLI runner that demonstrates persistent memory across multiple turns using a SQLite-backed session:
 
-2.  **Run the ADK web interface**:
+```bash
+cd f_agent_with_memory
+python main.py
+```
 
-    ```bash
-    adk web
-    ```
+Sessions are stored at `~/.adk/sessions/adk_cli_sessions.db` and persist between runs.
 
-## Deactivating the Environment
+### CLI — module g (MCP Toolbox)
 
-When you're done, you can deactivate the virtual environment:
+Module `g_agents_mcp` requires a running MCP Toolbox server. Start it in a separate terminal before running the agent:
+
+```bash
+# Terminal 1 - start the MCP Toolbox server
+# See: https://github.com/googleapis/genai-toolbox
+toolbox --tools-file mcp_tool_box/trip_tools.yaml
+
+# Terminal 2 - run the agent
+cd g_agents_mcp
+python main.py
+```
+
+The `destinations.db` database is created automatically by the setup script. If you need to recreate it:
+
+```bash
+python setup_trip_database.py
+```
+
+## Environment Variables
+
+**Option 1 — Vertex AI (default):**
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_GENAI_USE_VERTEXAI` | Set to `TRUE` |
+| `GOOGLE_CLOUD_PROJECT` | Your GCP project ID |
+| `GOOGLE_CLOUD_LOCATION` | GCP region (default: `us-central1`) |
+
+**Option 2 — Gemini API key:**
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_GENAI_USE_VERTEXAI` | Set to `FALSE` |
+| `GOOGLE_API_KEY` | Your Gemini API key from AI Studio |
+
+**Module g only:**
+
+| Variable | Description |
+|----------|-------------|
+| `MCP_SERVER_URL` | MCP server URL (default: `http://127.0.0.1:7001`) |
+
+See `.env.example` for a ready-to-copy template with both options.
+
+## Deactivating
 
 ```bash
 deactivate

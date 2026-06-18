@@ -1,12 +1,7 @@
 from google.adk.tools import google_search
-from google.adk.tools.agent_tool import AgentTool 
-from google.adk.agents.invocation_context import InvocationContext
-from google.adk.events import Event
-from google.adk.agents import Agent, ParallelAgent, SequentialAgent, LlmAgent, BaseAgent
+from google.adk.tools.agent_tool import AgentTool
+from google.adk.agents import Agent
 from dotenv import load_dotenv
-from typing_extensions import override
-import logging
-from typing import AsyncGenerator
 
 load_dotenv()
 
@@ -66,4 +61,3 @@ trip_architect_agent = Agent(
 
 # --- 3. Set the Root Agent ---
 root_agent = trip_architect_agent
-print("🤖 Trip Architect Agent, with agents as tools, is ready.")

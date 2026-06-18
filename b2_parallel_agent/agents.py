@@ -34,7 +34,7 @@ restaurant_finder_agent = Agent(
 )
 
 
-# ✨ The ParallelAgent runs all three specialists at once ✨
+# The ParallelAgent runs all three specialists at once
 parallel_research_agent = ParallelAgent(
     name="parallel_research_agent",
     sub_agents=[museum_finder_agent, concert_finder_agent, restaurant_finder_agent]
@@ -50,7 +50,7 @@ synthesis_agent = Agent(
     """
 )
 
-# ✨ The SequentialAgent runs the parallel search, then the synthesis ✨
+# The SequentialAgent runs the parallel search, then the synthesis
 parallel_planner_agent = SequentialAgent(
     name="parallel_planner_agent",
     sub_agents=[parallel_research_agent, synthesis_agent],
@@ -58,4 +58,3 @@ parallel_planner_agent = SequentialAgent(
 )
 
 root_agent = parallel_planner_agent
-print("🤖 Agent team supercharged with a ParallelAgent workflow!")

@@ -55,20 +55,18 @@ exit_agent = Agent(
     ELSE, do nothing."""
 )
 
-# ✨ The LoopAgent orchestrates the critique-refine cycle ✨
+# The LoopAgent orchestrates the critique-refine cycle
 refinement_loop = LoopAgent(
     name="refinement_loop",
     sub_agents=[critic_agent, refiner_agent, exit_agent],
     max_iterations=3
 )
 
-# ✨ The SequentialAgent puts it all together ✨
+# The SequentialAgent puts it all together
 iterative_planner_agent = SequentialAgent(
     name="iterative_planner_agent",
     sub_agents=[planner_agent, refinement_loop],
     description="A workflow that iteratively plans and refines a trip to meet constraints."
 )
-
-print("🤖 Agent team updated with an iterative LoopAgent workflow!")
 
 root_agent = iterative_planner_agent
